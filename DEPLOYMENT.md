@@ -16,23 +16,29 @@ This guide covers deploying the file sharing application with the backend on Rai
 2. Sign up with GitHub account
 3. Install Railway CLI: `npm install -g @railway/cli`
 
-### 2. Deploy Backend
+### 2. Deploy Backend with Cron Jobs
 ```bash
 # Login to Railway
 railway login
 
-# Navigate to backend directory
-cd apps/backend
+# Navigate to project root (not backend directory)
+cd file-sharing-app
 
-# Initialize Railway project
+# Initialize Railway project from root directory
 railway init
 
 # Add PostgreSQL database
 railway add postgresql
 
-# Deploy the application
+# Deploy using railway.yaml configuration
 railway up
 ```
+
+**Note**: The `railway.yaml` file configures multiple services:
+- `web`: Main FastAPI application
+- `expire-documents`: Cron job running every 30 minutes
+- `cleanup-documents`: Daily cron job at 2 AM UTC
+- `cleanup-audit-logs`: Weekly cron job on Sundays at 3 AM UTC
 
 ### 3. Configure Environment Variables
 In Railway dashboard, set these environment variables:
