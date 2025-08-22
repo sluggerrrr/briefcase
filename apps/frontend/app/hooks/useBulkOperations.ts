@@ -2,6 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from './useAuth';
+import { apiClient } from '@/lib/auth';
 
 interface BulkOperationResult {
   document_id: string;
@@ -28,7 +29,7 @@ export function useBulkOperations() {
   const queryClient = useQueryClient();
 
   const makeRequest = async (endpoint: string, data?: any) => {
-    const response = await fetch(`/api/v1/documents/${endpoint}`, {
+    const response = await fetch(`${apiClient.baseURL}/api/v1/documents/${endpoint}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -71,7 +72,7 @@ export function useBulkOperations() {
 
   // Bulk Download
   const bulkDownload = async (documentIds: string[]) => {
-    const response = await fetch('/api/v1/documents/bulk/download', {
+    const response = await fetch(`${apiClient.baseURL}/api/v1/documents/bulk/download`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

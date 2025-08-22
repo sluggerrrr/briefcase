@@ -33,15 +33,15 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     },
   });
 
-  const validateEmail = (email: string) => {
-    if (!email) return 'Email is required';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email address';
+  const validateEmail = ({ value }: { value: string }) => {
+    if (!value) return 'Email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address';
     return undefined;
   };
 
-  const validatePassword = (password: string) => {
-    if (!password) return 'Password is required';
-    if (password.length < 6) return 'Password must be at least 6 characters';
+  const validatePassword = ({ value }: { value: string }) => {
+    if (!value) return 'Password is required';
+    if (value.length < 6) return 'Password must be at least 6 characters';
     return undefined;
   };
 
@@ -66,6 +66,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             name="email"
             validators={{
               onChange: validateEmail,
+              onBlur: validateEmail,
+              onSubmit: validateEmail,
             }}
           >
             {(field) => (
@@ -84,9 +86,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                     disabled={isLoggingIn}
                   />
                 </div>
-                {field.state.meta.errors && (
+                {field.state.meta.errors?.length ? (
                   <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
-                )}
+                ) : null}
               </div>
             )}
           </form.Field>
@@ -95,6 +97,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             name="password"
             validators={{
               onChange: validatePassword,
+              onBlur: validatePassword,
+              onSubmit: validatePassword,
             }}
           >
             {(field) => (
@@ -127,9 +131,9 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                     )}
                   </Button>
                 </div>
-                {field.state.meta.errors && (
+                {field.state.meta.errors?.length ? (
                   <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
-                )}
+                ) : null}
               </div>
             )}
           </form.Field>

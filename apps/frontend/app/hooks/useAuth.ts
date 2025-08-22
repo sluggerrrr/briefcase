@@ -80,5 +80,6 @@ export function useAuth() {
     logout,
     isLoggingIn: loginMutation.isPending,
     loginError: loginMutation.error?.message,
+    token: authStorage.getToken(),
   };
 }

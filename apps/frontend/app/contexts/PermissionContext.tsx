@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { apiClient } from '@/lib/auth';
 
 interface UserPermissions {
   roles: string[];
@@ -54,7 +55,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
     setError(null);
 
     try {
-      const response = await fetch('/api/v1/permissions/users/me/permissions', {
+      const response = await fetch(`${apiClient.baseURL}/api/v1/permissions/users/me/permissions`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
