@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -18,8 +18,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { 
   Share, 
-  Users, 
-  
+  Users,
   X, 
   CheckCircle, 
   XCircle,
@@ -81,7 +80,15 @@ export function BulkShareDialog({
   const [expiresAt, setExpiresAt] = useState<Date | undefined>();
 
   const { bulkShare } = useBulkOperations();
-  const { data: searchResults, isLoading: isSearching } = useUserSearch(userSearchQuery);
+  const { users: allUsers, setSearchTerm, isLoading: isSearching } = useUserSearch();
+  
+  // Update search term when userSearchQuery changes
+  React.useEffect(() => {
+    setSearchTerm(userSearchQuery);
+  }, [userSearchQuery, setSearchTerm]);
+  
+  // Use filtered results from the hook
+  const searchResults = allUsers;
 
   const handleAddUser = (user: { id: string; email: string }) => {
     if (!selectedUsers.find(u => u.id === user.id)) {
