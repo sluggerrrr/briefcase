@@ -16,11 +16,11 @@ Set up the basic project infrastructure including backend FastAPI application st
 ## Acceptance Criteria
 1. ✅ Monorepo structure created with separate `apps/frontend/` and `apps/backend/` directories
 2. ✅ Next.js application initialized with TypeScript configuration and essential dependencies
-3. ⏳ FastAPI application initialized with Python virtual environment and project structure
-4. ⏳ Development environment configuration with package management (uv for backend, npm for frontend)
-5. ⏳ Basic project documentation in CLAUDE.md files
-6. ⏳ Git repository with appropriate .gitignore files for both Node.js and Python
-7. ⏳ Environment variable templates (.env.example files)
+3. ✅ FastAPI application initialized with Python virtual environment and project structure
+4. ✅ Development environment configuration with package management (uv for backend, npm for frontend)
+5. ✅ Basic project documentation in CLAUDE.md files
+6. ✅ Git repository with appropriate .gitignore files for both Node.js and Python
+7. ✅ Environment variable templates (.env.example files)
 
 ## Technical Requirements
 - FastAPI backend with uv package manager

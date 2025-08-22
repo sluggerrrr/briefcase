@@ -14,16 +14,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     
     # Database Configuration
-    DB_HOST: str = os.getenv("DB_HOST", "localhost")
-    DB_PORT: int = int(os.getenv("DB_PORT", "5432"))
-    DB_NAME: str = os.getenv("DB_NAME", "briefcase_db")
-    DB_USER: str = os.getenv("DB_USER", "briefcase_user")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "briefcase_password")
-    
-    @property
-    def DATABASE_URL(self) -> str:
-        """Construct database URL from individual components."""
-        return f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./briefcase_dev.db")
     
     # Security
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-here-change-in-production")
