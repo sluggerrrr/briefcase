@@ -1,0 +1,19 @@
+[variables]
+PYTHON_VERSION = "3.12"
+UV_CACHE_DIR = "/tmp/uv-cache"
+
+[phases.setup]
+nixPkgs = ["python312", "curl"]
+
+[phases.install]
+cmds = [
+    "curl -LsSf https://astral.sh/uv/install.sh | sh",
+    "source $HOME/.cargo/env",
+    "uv sync --no-dev"
+]
+
+[phases.build]
+cmds = ["echo 'Build phase complete'"]
+
+[start]
+cmd = "source $HOME/.cargo/env && uv run uvicorn app.main:app --host 0.0.0.0 --port $PORT"

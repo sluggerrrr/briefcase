@@ -5,10 +5,9 @@
 services:
   # Main Backend API Service
   web:
+    source: apps/backend
     build:
-      context: apps/backend
-      dockerfile: Dockerfile
-      target: production
+      builder: nixpacks
     env:
       PORT: ${{PORT}}
       DATABASE_URL: ${{DATABASE_URL}}
@@ -28,7 +27,6 @@ services:
       numReplicas: 1
       restartPolicyType: always
       restartPolicyMaxRetries: 3
-    start: .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
     
   # PostgreSQL Database Service
   postgres:
