@@ -46,6 +46,17 @@ export function DocumentCard({ document, onEdit, onView }: DocumentCardProps) {
   };
 
   const getStatusBadge = () => {
+    // Check if view limit is exhausted
+    const isViewExhausted = document.view_limit && document.access_count >= document.view_limit;
+    
+    if (isViewExhausted) {
+      return (
+        <Badge className="bg-transparent text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-600/30 gap-1.5">
+          <EyeOff className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" /> View limit reached
+        </Badge>
+      );
+    }
+
     switch (document.status) {
       case 'active':
         return (
@@ -63,12 +74,6 @@ export function DocumentCard({ document, onEdit, onView }: DocumentCardProps) {
         return (
           <Badge className="bg-transparent text-neutral-700 dark:text-neutral-300 ring-1 ring-inset ring-neutral-500/30">
             Deleted
-          </Badge>
-        );
-      case 'view_exhausted':
-        return (
-          <Badge className="bg-transparent text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-600/30 gap-1.5">
-            <EyeOff className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" /> View limit reached
           </Badge>
         );
       default:
