@@ -46,6 +46,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "alembic" },
     { name = "bcrypt" },
+    { name = "cryptography" },
     { name = "email-validator" },
     { name = "fastapi" },
     { name = "httpx" },
@@ -65,6 +66,7 @@ dependencies = [
 requires-dist = [
     { name = "alembic", specifier = ">=1.16.4" },
     { name = "bcrypt", specifier = ">=4.3.0" },
+    { name = "cryptography", specifier = ">=41.0.0" },
     { name = "email-validator", specifier = ">=2.2.0" },
     { name = "fastapi", specifier = ">=0.116.1" },
     { name = "httpx", specifier = ">=0.25.0" },

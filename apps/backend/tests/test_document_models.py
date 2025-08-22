@@ -31,6 +31,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted_base64_content",
+            encryption_iv="base64_iv_here",
             view_limit=5,
             expires_at=datetime.now(timezone.utc) + timedelta(days=7)
         )
@@ -59,6 +60,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted",
+            encryption_iv="test_iv",
             view_limit=5,
             expires_at=datetime.now(timezone.utc) + timedelta(days=7)
         )
@@ -81,6 +83,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted",
+            encryption_iv="test_iv",
             expires_at=datetime.now(timezone.utc) - timedelta(days=1)  # Expired yesterday
         )
         db_session.add(document)
@@ -102,6 +105,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted",
+            encryption_iv="test_iv",
             view_limit=2,
             access_count=2  # Already viewed twice
         )
@@ -125,6 +129,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted",
+            encryption_iv="test_iv",
             expires_at=datetime.now(timezone.utc) + timedelta(days=7)
         )
         db_session.add(document)
@@ -153,6 +158,7 @@ class TestDocumentModel:
             sender_id=sender.id,
             recipient_id=recipient.id,
             encrypted_content="encrypted",
+            encryption_iv="test_iv",
             view_limit=3
         )
         db_session.add(document)
@@ -185,7 +191,8 @@ class TestDocumentModel:
             file_size=1024,
             sender_id=sender.id,
             recipient_id=recipient.id,
-            encrypted_content="encrypted"
+            encrypted_content="encrypted",
+            encryption_iv="test_iv"
         )
         db_session.add(document)
         db_session.commit()
@@ -216,7 +223,8 @@ class TestDocumentAccessLog:
             file_size=1024,
             sender_id=user.id,
             recipient_id=user.id,
-            encrypted_content="encrypted"
+            encrypted_content="encrypted",
+            encryption_iv="test_iv"
         )
         db_session.add(document)
         db_session.commit()
@@ -251,7 +259,8 @@ class TestDocumentAccessLog:
             file_size=1024,
             sender_id=user.id,
             recipient_id=user.id,
-            encrypted_content="encrypted"
+            encrypted_content="encrypted",
+            encryption_iv="test_iv"
         )
         db_session.add(document)
         db_session.commit()

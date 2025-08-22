@@ -39,6 +39,7 @@ class Document(Base):
     
     # Security parameters
     encrypted_content = Column(Text, nullable=False)  # Base64 encoded encrypted content
+    encryption_iv = Column(String(100), nullable=False)  # Base64 encoded initialization vector
     encryption_key_id = Column(String(100), nullable=True)  # Reference to key used for encryption
     expires_at = Column(DateTime(timezone=True), nullable=True, index=True)
     view_limit = Column(Integer, nullable=True, default=None)  # None means unlimited
