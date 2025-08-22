@@ -1,14 +1,14 @@
-# File Sharing App - Monorepo
+# Briefcase - Secure Document Sharing
 
-This is a file sharing application built as a monorepo with separate frontend and backend services.
+Briefcase is a secure document sharing application built as a monorepo with separate frontend and backend services.
 
 ## Project Structure
 
 ```
-file-sharing-app/
+briefcase/
 ├── apps/
 │   ├── frontend/      # Next.js frontend application
-│   └── backend/       # Backend service (FastAPI + PostgreSQL)
+│   └── backend/       # FastAPI backend with PostgreSQL
 └── CLAUDE.md         # This file
 ```
 
