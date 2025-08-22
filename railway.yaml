@@ -8,6 +8,12 @@ services:
     source: apps/backend
     build:
       builder: nixpacks
+      nixpacksPlan:
+        phases:
+          setup:
+            nixPkgs: ["python312", "python312Packages.pip"]
+          install:
+            cmds: ["pip install -r requirements.txt"]
     env:
       PORT: ${{PORT}}
       DATABASE_URL: ${{DATABASE_URL}}
