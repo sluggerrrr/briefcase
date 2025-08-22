@@ -376,23 +376,30 @@ class DocumentService:
         Returns:
             List[DocumentResponse]: List of documents
         """
+        from sqlalchemy import or_, and_
+
         query = db.query(Document).filter(Document.status != DocumentStatus.DELETED)
-        
+
+        # Build role-aware conditions at the SQL level. If the user is the
+        # recipient, exclude rows whose view limit is exhausted.
         conditions = []
         if sent:
             conditions.append(Document.sender_id == current_user.id)
         if received:
-            conditions.append(Document.recipient_id == current_user.id)
-        
+            conditions.append(
+                and_(
+                    Document.recipient_id == current_user.id,
+                    or_(Document.view_limit.is_(None), Document.access_count < Document.view_limit),
+                )
+            )
+
         if conditions:
-            from sqlalchemy import or_
             query = query.filter(or_(*conditions))
         else:
             # If neither sent nor received, return empty list
             return []
-        
+
         documents = query.order_by(Document.created_at.desc()).all()
-        
         return [DocumentResponse.from_orm_with_users(doc) for doc in documents]
     
     @staticmethod
