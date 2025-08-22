@@ -77,6 +77,7 @@ export function useAuth() {
     ...authState,
     user: currentUser || authState.user,
     login: loginMutation.mutate,
+    loginAsync: loginMutation.mutateAsync,
     logout,
     isLoggingIn: loginMutation.isPending,
     loginError: loginMutation.error?.message,

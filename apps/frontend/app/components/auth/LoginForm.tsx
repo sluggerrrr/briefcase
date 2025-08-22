@@ -15,7 +15,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  const { login, isLoggingIn, loginError } = useAuth();
+  const { login, loginAsync, isLoggingIn, loginError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm({
@@ -25,7 +25,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     },
     onSubmit: async ({ value }: { value: LoginCredentials }) => {
       try {
-        login(value);
+        await (loginAsync ? loginAsync(value) : Promise.resolve(login(value)));
         onSuccess?.();
       } catch (error) {
         console.error('Form submission error:', error);

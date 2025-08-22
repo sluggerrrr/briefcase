@@ -85,14 +85,9 @@ export const apiClient = {
   },
 
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const formData = new FormData();
-    formData.append('username', credentials.email);
-    formData.append('password', credentials.password);
-
     return this.request<AuthResponse>('/api/v1/auth/login', {
       method: 'POST',
-      headers: {}, // FormData sets its own Content-Type
-      body: formData,
+      body: JSON.stringify({ email: credentials.email, password: credentials.password }),
     });
   },
 

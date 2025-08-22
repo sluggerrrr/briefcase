@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { AppHeader } from '@/components/layout/AppHeader';
+import { ProtectedRoute } from '../auth/ProtectedRoute';
+import { AppHeader } from '../layout/AppHeader';
 import { DocumentList } from './DocumentList';
-import { DocumentUpload } from '@/components/upload/DocumentUpload';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DocumentUpload } from '../upload/DocumentUpload';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Upload } from 'lucide-react';
 import { Toaster } from 'sonner';
 
