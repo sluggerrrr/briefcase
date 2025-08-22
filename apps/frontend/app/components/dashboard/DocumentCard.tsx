@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { DocumentResponse, formatFileSize, formatDate, getMimeTypeIcon } from '@/lib/documents';
 import { useAuth } from '@/hooks/useAuth';
 import { useDeleteDocument, useDownloadDocument } from '@/hooks/useDocuments';
-import { MoreVertical, Download, Eye, Trash2, Edit } from 'lucide-react';
+import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DocumentCardProps {
@@ -48,11 +48,29 @@ export function DocumentCard({ document, onEdit, onView }: DocumentCardProps) {
   const getStatusBadge = () => {
     switch (document.status) {
       case 'active':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Active</Badge>;
+        return (
+          <Badge className="bg-transparent text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/30 gap-1.5">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-300" /> Active
+          </Badge>
+        );
       case 'expired':
-        return <Badge variant="destructive">Expired</Badge>;
+        return (
+          <Badge className="bg-transparent text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-600/30 gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-300" /> Expired
+          </Badge>
+        );
       case 'deleted':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Deleted</Badge>;
+        return (
+          <Badge className="bg-transparent text-neutral-700 dark:text-neutral-300 ring-1 ring-inset ring-neutral-500/30">
+            Deleted
+          </Badge>
+        );
+      case 'view_exhausted':
+        return (
+          <Badge className="bg-transparent text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-600/30 gap-1.5">
+            <EyeOff className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" /> View limit reached
+          </Badge>
+        );
       default:
         return <Badge variant="outline">{document.status}</Badge>;
     }
