@@ -48,8 +48,8 @@ class User(Base):
     
     __tablename__ = "users"
     
-    # Primary key with UUID for security
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4, index=True)
+    # Primary key with UUID for security  
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     
     # Authentication fields
     email = Column(String(255), unique=True, nullable=False, index=True)

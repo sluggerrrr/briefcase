@@ -53,4 +53,38 @@ SECRET_KEY=your-secret-key
 
 ## Development
 
-Project setup and API specifications to be defined.
+### Running Tests
+
+The project uses pytest for testing with proper test isolation and fixtures.
+
+```bash
+# Run all tests
+uv run pytest
+
+# Run tests with verbose output
+uv run pytest -v
+
+# Run specific test file
+uv run pytest tests/test_auth.py
+
+# Run specific test class or function
+uv run pytest tests/test_auth.py::TestUserLogin
+uv run pytest tests/test_auth.py::TestUserLogin::test_login_valid_credentials
+
+# Run tests with coverage (when coverage is added)
+uv run pytest --cov=app tests/
+```
+
+### Test Structure
+
+- `tests/conftest.py` - Test configuration and fixtures
+- `tests/test_auth.py` - Authentication system tests
+- Uses SQLite in-memory database for test isolation
+- Automated test fixtures for user registration and authentication
+
+### Development Workflow
+
+1. Write tests first (TDD approach)
+2. Implement functionality to pass tests
+3. Run tests to verify implementation
+4. Refactor if needed while keeping tests green
