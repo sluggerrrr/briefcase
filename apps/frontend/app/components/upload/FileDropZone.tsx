@@ -84,18 +84,12 @@ export function FileDropZone({ onFilesAdded, maxFiles = 1, className, disabled }
     e.target.value = '';
   }, [handleFiles]);
 
-  const handleClick = () => {
-    if (disabled) return;
-    document.getElementById('file-input')?.click();
-  };
-
   return (
     <div className={className}>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={handleClick}
         className={`
           relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-200
           ${isDragOver && !disabled

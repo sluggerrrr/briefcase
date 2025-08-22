@@ -30,26 +30,26 @@ export function FilePreview({
   const getCategoryIcon = () => {
     switch (category) {
       case 'document':
-        return <FileText className="h-5 w-5 text-blue-500" />;
+        return <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />;
       case 'image':
-        return <ImageIcon className="h-5 w-5 text-green-500" />;
+        return <ImageIcon className="h-5 w-5 text-green-600 dark:text-green-400" />;
       case 'archive':
-        return <Archive className="h-5 w-5 text-purple-500" />;
+        return <Archive className="h-5 w-5 text-purple-600 dark:text-purple-400" />;
       default:
-        return <FileText className="h-5 w-5 text-gray-500" />;
+        return <FileText className="h-5 w-5 text-muted-foreground" />;
     }
   };
 
   const getCategoryColor = () => {
     switch (category) {
       case 'document':
-        return 'bg-blue-50 border-blue-200';
+        return 'bg-blue-500/10 border-blue-500/20';
       case 'image':
-        return 'bg-green-50 border-green-200';
+        return 'bg-green-500/10 border-green-500/20';
       case 'archive':
-        return 'bg-purple-50 border-purple-200';
+        return 'bg-purple-500/10 border-purple-500/20';
       default:
-        return 'bg-gray-50 border-gray-200';
+        return 'bg-muted/50 border-border';
     }
   };
 
