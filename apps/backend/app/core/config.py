@@ -22,11 +22,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # CORS
-    ALLOWED_HOSTS: List[str] = (
-        os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
-        .split(",") if os.getenv("CORS_ORIGINS") else 
-        ["http://localhost:3000", "http://127.0.0.1:3000"]
-    )
+    ALLOWED_HOSTS: List[str] = [
+        origin.strip().rstrip("/") for origin in 
+        os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
+    ] if os.getenv("CORS_ORIGINS") else ["http://localhost:3000", "http://127.0.0.1:3000"]
     
     # File Upload
     UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "./uploads")
