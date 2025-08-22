@@ -17,7 +17,8 @@
       "Bash(git rebase:*)",
       "Bash(git stash push:*)",
       "Bash(railway logs:*)",
-      "WebFetch(domain:docs.railway.com)"
+      "WebFetch(domain:docs.railway.com)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

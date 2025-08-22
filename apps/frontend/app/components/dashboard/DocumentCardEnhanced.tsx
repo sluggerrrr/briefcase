@@ -182,7 +182,7 @@ export function DocumentCardEnhanced({
           
           <div className="flex items-center gap-2">
             {getStatusBadge()}
-            {isOwner && <Shield className="h-4 w-4 text-primary" title="Document Owner" />}
+            {isOwner && <Shield className="h-4 w-4 text-primary" />}
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>

@@ -22,12 +22,14 @@ export function RecipientSelector({
   error,
   disabled 
 }: RecipientSelectorProps) {
+  // Explicitly type selectedRecipient to help TypeScript
+  const currentSelection: User | null = selectedRecipient;
   const [open, setOpen] = useState(false);
   const { users, searchTerm, setSearchTerm, isLoading } = useUserSearch();
   const { user: currentUser } = useAuth();
 
-  // Filter out current user from recipients
-  const availableUsers = users.filter(user => user.id !== currentUser?.id);
+  // Filter out current user from recipients  
+  const availableUsers = (users as User[]).filter(user => user.id !== currentUser?.id);
 
   const handleSelect = (user: User) => {
     onRecipientChange(user);
@@ -101,30 +103,34 @@ export function RecipientSelector({
                       {searchTerm ? 'No users found.' : 'No other users available.'}
                     </CommandEmpty>
                   ) : (
-                    <CommandGroup>
-                      {availableUsers.map((user) => (
-                        <CommandItem
-                          key={user.id}
-                          value={user.email}
-                          onSelect={() => handleSelect(user)}
-                          className="flex items-center gap-2"
-                        >
-                          <div className="flex items-center gap-2 flex-1">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                              <Users className="h-4 w-4 text-primary" />
+                                         <CommandGroup>
+                       {availableUsers.map((user) => {
+                        const isSelected = currentSelection && currentSelection.id === user.id;
+                        
+                        return (
+                          <CommandItem
+                            key={user.id}
+                            value={user.email}
+                            onSelect={() => handleSelect(user)}
+                            className="flex items-center gap-2"
+                          >
+                            <div className="flex items-center gap-2 flex-1">
+                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                <Users className="h-4 w-4 text-primary" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-sm truncate">{user.email}</p>
+                                {user.name && (
+                                  <p className="text-xs text-muted-foreground truncate">{user.name}</p>
+                                )}
+                              </div>
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-medium text-sm truncate">{user.email}</p>
-                              {user.name && (
-                                <p className="text-xs text-muted-foreground truncate">{user.name}</p>
-                              )}
-                            </div>
-                          </div>
-                          {selectedRecipient?.id === user.id && (
-                            <Check className="h-4 w-4" />
-                          )}
-                        </CommandItem>
-                      ))}
+                            {isSelected && (
+                              <Check className="h-4 w-4" />
+                            )}
+                          </CommandItem>
+                        );
+                      })}
                     </CommandGroup>
                   )}
                 </CommandList>

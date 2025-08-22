@@ -106,7 +106,7 @@ export function DocumentUpload({ onUploadComplete, onCancel }: DocumentUploadPro
         description: description.trim() || undefined,
         recipient_id: recipient.id,
         expires_at: expiresAt?.toISOString(),
-        view_limit: viewLimit,
+        view_limit: viewLimit ?? undefined,
       };
 
       await uploadFile(selectedFile, uploadData);

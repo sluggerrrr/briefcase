@@ -30,8 +30,8 @@ export function DocumentList({ className }: DocumentListProps) {
       const search = searchTerm.toLowerCase();
       if (!doc.title.toLowerCase().includes(search) &&
           !doc.file_name.toLowerCase().includes(search) &&
-          !doc.sender_email.toLowerCase().includes(search) &&
-          !doc.recipient_email.toLowerCase().includes(search)) {
+          !doc.sender_email?.toLowerCase().includes(search) &&
+          !doc.recipient_email?.toLowerCase().includes(search)) {
         return false;
       }
     }

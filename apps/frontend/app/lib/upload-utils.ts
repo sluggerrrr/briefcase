@@ -197,7 +197,7 @@ export function processFileForUpload(file: File): FileWithPreview {
   const fileWithId = Object.assign(file, { id: generateFileId() });
   const preview = createImagePreview(file);
   
-  return Object.assign(fileWithId, { preview });
+  return Object.assign(fileWithId, { preview: preview || undefined });
 }
 
 /**

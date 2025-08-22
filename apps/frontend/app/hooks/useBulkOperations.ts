@@ -17,7 +17,7 @@ interface BulkOperationResponse {
   results: BulkOperationResult[];
 }
 
-interface BulkShareRequest {
+interface BulkShareRequest extends Record<string, unknown> {
   document_ids: string[];
   recipient_ids: string[];
   permission_type: string;

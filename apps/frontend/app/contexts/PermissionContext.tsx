@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { apiClient } from '@/lib/auth';
 
@@ -45,7 +45,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
     return documentIds.every(id => hasDocumentPermission(id, operation));
   };
 
-  const refreshPermissions = async (): Promise<void> => {
+  const refreshPermissions = useCallback(async (): Promise<void> => {
     if (!user || !token) {
       setPermissions(null);
       return;
@@ -75,7 +75,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user, token]);
 
   useEffect(() => {
     if (user && token) {

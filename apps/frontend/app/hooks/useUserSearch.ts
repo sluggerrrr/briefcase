@@ -15,7 +15,7 @@ export function useUserSearch() {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Fetch all users
-  const { data: users = [], isLoading, error } = useQuery({
+  const { data: users = [] as User[], isLoading, error } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       return apiClient.request<User[]>('/api/v1/users');
