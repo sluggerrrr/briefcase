@@ -3,6 +3,7 @@
 
 [build]
 builder = "nixpacks"
+watchPatterns = ["apps/backend/**", "railway.toml"]
 
 [build.nixpacksPlan.variables]
 NIXPACKS_PYTHON_PACKAGE_MANAGER = "uv"
