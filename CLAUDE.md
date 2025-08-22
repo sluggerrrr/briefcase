@@ -56,6 +56,14 @@ briefcase/
 - Tailwind CSS v4 is set up for styling
 - ESLint is configured for code quality
 
+## Git Commit Guidelines
+
+Include LLM version in commit footer:
+```
+🤖 Generated with [Claude Code](https://claude.ai/code)(Claude Sonnet 4)
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
 ## Next Steps
 
 1. Set up backend service
