@@ -8,6 +8,8 @@ services:
     source: apps/backend
     build:
       builder: nixpacks
+      buildCommand: "curl -LsSf https://astral.sh/uv/install.sh | sh && source $HOME/.cargo/env && uv sync"
+    start: "source $HOME/.cargo/env && uv run uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     env:
       PORT: ${{PORT}}
       DATABASE_URL: ${{DATABASE_URL}}
