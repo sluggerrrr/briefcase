@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_db
-from app.dependencies.auth import get_current_active_user
+from app.api.dependencies import get_current_active_user
 from app.dependencies.permissions import get_admin_user, require_permission, require_document_access
 from app.models.user import User
 from app.services.permission_service import PermissionService

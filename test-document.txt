@@ -1,0 +1,9 @@
+This is a test document for testing the Briefcase file sharing API.
+
+It contains some sample content to verify that:
+- Document upload works correctly
+- Encryption is applied properly  
+- File metadata is stored
+- Access controls are enforced
+
+Test timestamp: 2025-08-22 06:05:00

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run pytest:*)",
+      "Bash(git add:*)",
+      "Bash(npm run lint)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(git checkout:*)",
+      "Bash(curl:*)",
+      "Bash(grep:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

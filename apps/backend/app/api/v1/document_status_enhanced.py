@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 
 from app.core.database import get_db
-from app.dependencies.auth import get_current_active_user
+from app.api.dependencies import get_current_active_user
 from app.dependencies.permissions import get_admin_user, require_permission
 from app.models.user import User
 from app.models.document import Document, DocumentStatus

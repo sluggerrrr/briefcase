@@ -6,7 +6,7 @@ from typing import Any, Callable
 from fastapi import HTTPException, Depends, status
 from sqlalchemy.orm import Session
 
-from app.dependencies.auth import get_current_active_user
+from app.api.dependencies import get_current_active_user
 from app.api.dependencies import get_db
 from app.models.user import User
 from app.services.permission_service import PermissionService

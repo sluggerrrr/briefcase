@@ -1,7 +1,7 @@
 """
 Permission service for role-based access control.
 """
-from typing import List, Optional, Dict, Set
+from typing import List, Optional, Dict, Set, Any
 from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
