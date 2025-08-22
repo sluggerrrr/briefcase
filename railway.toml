@@ -8,14 +8,14 @@ builder = "nixpacks"
 NIXPACKS_PYTHON_PACKAGE_MANAGER = "uv"
 
 [build.nixpacksPlan.phases.setup]
-nixPkgs = ["python312"]
+nixPkgs = ["python312", "uv"]
 
 [build.nixpacksPlan.phases.install] 
 cmds = ["uv sync --no-dev --frozen"]
 
 [deploy]
 startCommand = "python main.py"
-restartPolicyType = "always"
+restartPolicyType = ""
 restartPolicyMaxRetries = 3
 healthcheckPath = "/health"
 healthcheckTimeout = 30
