@@ -7,9 +7,7 @@ services:
   web:
     source: apps/backend
     build:
-      builder: DOCKERFILE
-      dockerfilePath: Dockerfile
-      target: production
+      builder: nixpacks
     env:
       PORT: ${{PORT}}
       DATABASE_URL: ${{DATABASE_URL}}
