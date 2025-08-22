@@ -1,0 +1,73 @@
+# Root .gitignore for file-sharing-app monorepo
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+
+# Build artifacts
+dist/
+build/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# File uploads (for development)
+uploads/
+files/
+
+# BMAD runtime/cache files (keep templates and configs)
+.bmad-core/cache/
+.bmad-core/runtime/
+.bmad-core/logs/
+.bmad-core/.temp/
+
+# IDE-specific files
+*.code-workspace
+.history/
