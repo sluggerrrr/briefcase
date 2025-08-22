@@ -7,7 +7,15 @@
       "Bash(npx shadcn@latest add:*)",
       "Bash(git checkout:*)",
       "Bash(curl:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git push:*)",
+      "Bash(railway link:*)",
+      "Bash(railway service:*)",
+      "Bash(railway status:*)",
+      "WebSearch",
+      "WebFetch(domain:nixpacks.com)",
+      "Bash(git rebase:*)",
+      "Bash(git stash push:*)"
     ],
     "deny": [],
     "ask": []

@@ -14,8 +14,8 @@ nixPkgs = ["python312", "uv"]
 cmds = ["uv sync --no-dev --frozen"]
 
 [deploy]
-startCommand = "python main.py"
-restartPolicyType = ""
+startCommand = "uv run python main.py"
+restartPolicyType = "Never"
 restartPolicyMaxRetries = 3
 healthcheckPath = "/health"
 healthcheckTimeout = 30
