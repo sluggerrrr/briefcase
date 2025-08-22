@@ -5,10 +5,10 @@ import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.api.v1 import auth, users, documents, admin, document_status, permissions, documents_enhanced, admin_enhanced, document_status_enhanced
-from app.services.lifecycle_service import initialize_lifecycle_config
-from app.services.permission_service import PermissionService
+from core.config import settings
+from api.v1 import auth, users, documents, admin, document_status, permissions, documents_enhanced, admin_enhanced, document_status_enhanced
+from services.lifecycle_service import initialize_lifecycle_config
+from services.permission_service import PermissionService
 
 
 @asynccontextmanager
@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     await initialize_lifecycle_config()
     
     # Initialize permission system
-    from app.core.database import get_db
+    from core.database import get_db
     db = next(get_db())
     try:
         PermissionService.initialize_default_roles(db)
@@ -86,7 +86,7 @@ async def health_check():
 @app.get("/health/lifecycle")
 async def lifecycle_health_check():
     """Health check for lifecycle processes."""
-    from app.services.lifecycle_service import DocumentLifecycleService
+    from services.lifecycle_service import DocumentLifecycleService
     
     try:
         stats = await DocumentLifecycleService.get_lifecycle_statistics()
@@ -107,4 +107,4 @@ async def lifecycle_health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
