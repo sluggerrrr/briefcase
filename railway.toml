@@ -1,0 +1,18 @@
+# Railway Deployment Configuration for Briefcase Backend
+# This configuration deploys the FastAPI backend with PostgreSQL database
+
+[build]
+builder = "nixpacks"
+
+[build.nixpacksPlan.phases.setup]
+nixPkgs = ["python312", "python312Packages.pip"]
+
+[build.nixpacksPlan.phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[deploy]
+startCommand = "python main.py"
+restartPolicyType = "always"
+restartPolicyMaxRetries = 3
+healthcheckPath = "/health"
+healthcheckTimeout = 30
