@@ -15,7 +15,8 @@
       "WebSearch",
       "WebFetch(domain:nixpacks.com)",
       "Bash(git rebase:*)",
-      "Bash(git stash push:*)"
+      "Bash(git stash push:*)",
+      "Bash(railway logs:*)"
     ],
     "deny": [],
     "ask": []
