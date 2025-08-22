@@ -38,6 +38,7 @@ async def upload_document(
 
 
 @router.get("/", response_model=List[DocumentResponse])
+@router.get("", response_model=List[DocumentResponse])  # Alternative route without trailing slash
 async def list_documents(
     sent: bool = Query(True, description="Include sent documents"),
     received: bool = Query(True, description="Include received documents"),

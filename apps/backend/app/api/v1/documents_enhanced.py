@@ -15,6 +15,7 @@ from app.api.dependencies import get_current_active_user
 from app.dependencies.permissions import require_permission, require_document_access, require_bulk_permission
 from app.models.user import User
 from app.models.document import Document
+from app.models.permissions import DocumentPermission
 from app.services.document_service import DocumentService
 from app.services.permission_service import PermissionService
 from app.schemas.document import (

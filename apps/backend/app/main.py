@@ -56,15 +56,15 @@ app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 
 # Document APIs - both original and enhanced
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
-app.include_router(documents_enhanced.router, prefix="/api/v1/documents", tags=["documents-enhanced"])
+app.include_router(documents_enhanced.router, prefix="/api/v1/documents-enhanced", tags=["documents-enhanced"])
 
 # Admin APIs - both original and enhanced  
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
-app.include_router(admin_enhanced.router, prefix="/api/v1/admin", tags=["admin-enhanced"])
+app.include_router(admin_enhanced.router, prefix="/api/v1/admin-enhanced", tags=["admin-enhanced"])
 
 # Status APIs - both original and enhanced
-app.include_router(document_status.router, prefix="/api/v1", tags=["document-status"])
-app.include_router(document_status_enhanced.router, prefix="/api/v1", tags=["document-status-enhanced"])
+app.include_router(document_status.router, prefix="/api/v1/status", tags=["document-status"])
+app.include_router(document_status_enhanced.router, prefix="/api/v1/status-enhanced", tags=["document-status-enhanced"])
 
 # Permission management APIs
 app.include_router(permissions.router, prefix="/api/v1/permissions", tags=["permissions"])
