@@ -4,7 +4,7 @@ FastAPI main application entry point for Briefcase.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import auth, users
+from app.api.v1 import auth, users, documents
 
 app = FastAPI(
     title="Briefcase API",
@@ -26,6 +26,7 @@ app.add_middleware(
 # Include API routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
+app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
 
 @app.get("/")
 async def root():
