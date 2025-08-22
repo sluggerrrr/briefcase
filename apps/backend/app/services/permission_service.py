@@ -417,3 +417,98 @@ class PermissionService:
                 db.add(role)
         
         db.commit()
+    
+    @staticmethod
+    async def get_system_permission_overview(db: Session) -> Dict[str, Any]:
+        """
+        Get system-wide permission overview for administrators.
+        
+        Args:
+            db: Database session
+            
+        Returns:
+            Dict[str, Any]: System permission statistics
+        """
+        from datetime import datetime, timedelta
+        
+        # Basic counts
+        total_users = db.query(User).count()
+        total_documents = db.query(Document).count()
+        total_permissions = db.query(DocumentPermission).count()
+        active_permission_groups = db.query(PermissionGroup).count()
+        
+        # Users by role
+        users_by_role = {}
+        roles = db.query(UserRole).all()
+        for role in roles:
+            count = db.query(UserRoleAssignment).filter(
+                UserRoleAssignment.role_id == role.id
+            ).count()
+            users_by_role[role.name] = count
+        
+        # Permissions by type
+        permissions_by_type = {}
+        permission_types = ["read", "write", "share", "delete", "admin"]
+        for perm_type in permission_types:
+            count = db.query(DocumentPermission).filter(
+                DocumentPermission.permission_type == perm_type
+            ).count()
+            permissions_by_type[perm_type] = count
+        
+        # Recent permission changes (last 24 hours)
+        yesterday = datetime.now() - timedelta(days=1)
+        recent_permission_changes = db.query(DocumentPermission).filter(
+            DocumentPermission.granted_at >= yesterday
+        ).count()
+        
+        return {
+            "total_users": total_users,
+            "total_documents": total_documents,
+            "total_permissions": total_permissions,
+            "users_by_role": users_by_role,
+            "permissions_by_type": permissions_by_type,
+            "active_permission_groups": active_permission_groups,
+            "recent_permission_changes": recent_permission_changes
+        }
+    
+    @staticmethod
+    async def cleanup_expired_permissions(db: Session) -> int:
+        """
+        Clean up expired permissions from the system.
+        
+        Args:
+            db: Database session
+            
+        Returns:
+            int: Number of permissions cleaned up
+        """
+        now = datetime.now()
+        
+        # Find expired permissions
+        expired_permissions = db.query(DocumentPermission).filter(
+            and_(
+                DocumentPermission.expires_at.isnot(None),
+                DocumentPermission.expires_at <= now
+            )
+        ).all()
+        
+        # Find expired role assignments
+        expired_assignments = db.query(UserRoleAssignment).filter(
+            and_(
+                UserRoleAssignment.expires_at.isnot(None),
+                UserRoleAssignment.expires_at <= now
+            )
+        ).all()
+        
+        total_cleaned = len(expired_permissions) + len(expired_assignments)
+        
+        # Remove expired permissions
+        for permission in expired_permissions:
+            db.delete(permission)
+        
+        # Remove expired role assignments
+        for assignment in expired_assignments:
+            db.delete(assignment)
+        
+        db.commit()
+        return total_cleaned

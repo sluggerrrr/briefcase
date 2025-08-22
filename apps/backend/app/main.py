@@ -6,8 +6,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import auth, users, documents, admin, document_status
+from app.api.v1 import auth, users, documents, admin, document_status, permissions, documents_enhanced, admin_enhanced, document_status_enhanced
 from app.services.lifecycle_service import initialize_lifecycle_config
+from app.services.permission_service import PermissionService
 
 
 @asynccontextmanager
@@ -15,6 +16,17 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager."""
     # Startup - initialize lifecycle configuration
     await initialize_lifecycle_config()
+    
+    # Initialize permission system
+    from app.core.database import get_db
+    db = next(get_db())
+    try:
+        PermissionService.initialize_default_roles(db)
+    except Exception as e:
+        print(f"Warning: Failed to initialize permission system: {e}")
+    finally:
+        db.close()
+    
     yield
     # Shutdown - no cleanup needed
 
@@ -40,9 +52,21 @@ app.add_middleware(
 # Include API routers
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
+
+# Document APIs - both original and enhanced
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
+app.include_router(documents_enhanced.router, prefix="/api/v1/documents", tags=["documents-enhanced"])
+
+# Admin APIs - both original and enhanced  
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
+app.include_router(admin_enhanced.router, prefix="/api/v1/admin", tags=["admin-enhanced"])
+
+# Status APIs - both original and enhanced
 app.include_router(document_status.router, prefix="/api/v1", tags=["document-status"])
+app.include_router(document_status_enhanced.router, prefix="/api/v1", tags=["document-status-enhanced"])
+
+# Permission management APIs
+app.include_router(permissions.router, prefix="/api/v1/permissions", tags=["permissions"])
 
 @app.get("/")
 async def root():
