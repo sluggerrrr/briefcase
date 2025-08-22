@@ -5,10 +5,10 @@
 builder = "nixpacks"
 
 [build.nixpacksPlan.phases.setup]
-nixPkgs = ["python312", "python312Packages.pip"]
+nixPkgs = ["python312"]
 
-[build.nixpacksPlan.phases.install]
-cmds = ["pip install -r requirements.txt"]
+[build.nixpacksPlan.phases.install] 
+cmds = ["python3 -m pip install -r requirements.txt"]
 
 [deploy]
 startCommand = "python main.py"
