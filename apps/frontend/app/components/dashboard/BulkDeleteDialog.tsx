@@ -10,7 +10,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -29,6 +28,12 @@ interface BulkDeleteDialogProps {
 interface DeleteResult {
   documentId: string;
   status: 'pending' | 'success' | 'failed' | 'permission_denied';
+  error?: string;
+}
+
+interface BulkOperationResult {
+  document_id: string;
+  status: 'success' | 'failed' | 'permission_denied';
   error?: string;
 }
 
@@ -63,7 +68,7 @@ export function BulkDeleteDialog({
       const result = await bulkDelete(documentIds);
       
       // Update results based on API response
-      const updatedResults = result.results.map((apiResult: any) => ({
+      const updatedResults = result.results.map((apiResult: BulkOperationResult) => ({
         documentId: apiResult.document_id,
         status: apiResult.status,
         error: apiResult.error

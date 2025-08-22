@@ -84,7 +84,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
       setPermissions(null);
       setError(null);
     }
-  }, [user, token]);
+  }, [user, token, refreshPermissions]);
 
   const value: PermissionContextType = {
     permissions,

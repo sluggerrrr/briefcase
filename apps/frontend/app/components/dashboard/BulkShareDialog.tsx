@@ -10,7 +10,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
@@ -19,7 +18,7 @@ import { Separator } from '@/components/ui/separator';
 import { 
   Share, 
   Users, 
-  Plus, 
+  
   X, 
   CheckCircle, 
   XCircle,
@@ -50,6 +49,12 @@ interface BulkShareDialogProps {
 interface ShareResult {
   documentId: string;
   status: 'pending' | 'success' | 'failed' | 'permission_denied';
+  error?: string;
+}
+
+interface BulkOperationResult {
+  document_id: string;
+  status: 'success' | 'failed' | 'permission_denied';
   error?: string;
 }
 
@@ -113,7 +118,7 @@ export function BulkShareDialog({
       });
       
       // Update results based on API response
-      const updatedResults = result.results.map((apiResult: any) => ({
+      const updatedResults = result.results.map((apiResult: BulkOperationResult) => ({
         documentId: apiResult.document_id,
         status: apiResult.status,
         error: apiResult.error

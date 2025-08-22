@@ -48,7 +48,6 @@ export function BulkActionsToolbar({
   const selectedDocumentIds = getSelectedDocumentIds();
   const {
     canBulkView,
-    canBulkEdit,
     canBulkShare,
     canBulkDelete,
     canBulkManage

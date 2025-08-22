@@ -28,7 +28,7 @@ export function useBulkOperations() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
-  const makeRequest = async (endpoint: string, data?: any) => {
+  const makeRequest = async (endpoint: string, data?: Record<string, unknown>) => {
     const response = await fetch(`${apiClient.baseURL}/api/v1/documents/${endpoint}`, {
       method: 'POST',
       headers: {

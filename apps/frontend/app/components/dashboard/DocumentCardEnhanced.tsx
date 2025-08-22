@@ -19,7 +19,6 @@ import {
   Share, 
   Settings, 
   Shield,
-  Star
 } from 'lucide-react';
 import { toast } from 'sonner';
 

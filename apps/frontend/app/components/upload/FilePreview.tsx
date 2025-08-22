@@ -76,6 +76,7 @@ export function FilePreview({
           <div className="flex-shrink-0">
             {file.preview ? (
               <div className="w-12 h-12 rounded-md overflow-hidden border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={file.preview} 
                   alt={`Preview of ${file.name}`}
