@@ -19,18 +19,17 @@ RUN pip install uv
 WORKDIR /app
 
 # Copy dependency files
-COPY pyproject.toml ./
+COPY pyproject.toml uv.lock ./
 
 # Install dependencies
 RUN uv venv && \
-    . .venv/bin/activate && \
     uv sync --no-dev
 
 # Development stage
 FROM base as development
 
 # Install development dependencies
-RUN . .venv/bin/activate && uv sync
+RUN uv sync
 
 # Copy application code
 COPY . .
