@@ -84,6 +84,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     disabled={isLoggingIn}
+                    autoFocus
                   />
                 </div>
                 {field.state.meta.errors?.length ? (
@@ -146,6 +147,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
           <Button
             type="submit"
+            size="mobile"
             className="w-full"
             disabled={isLoggingIn || !form.state.canSubmit}
           >

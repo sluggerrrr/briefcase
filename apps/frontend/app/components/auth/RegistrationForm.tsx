@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { PasswordStrengthIndicator } from '@/components/ui/password-strength-indicator';
 import { useState } from 'react';
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import { toast } from 'sonner';
@@ -127,6 +128,7 @@ export function RegistrationForm({ onSuccess }: RegistrationFormProps) {
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     disabled={isRegistering}
+                    autoFocus
                   />
                 </div>
                 {field.state.meta.errors?.length ? (
@@ -205,6 +207,10 @@ export function RegistrationForm({ onSuccess }: RegistrationFormProps) {
                     )}
                   </Button>
                 </div>
+                <PasswordStrengthIndicator 
+                  password={field.state.value} 
+                  className="mt-2"
+                />
                 {field.state.meta.errors?.length ? (
                   <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
                 ) : null}
@@ -259,6 +265,7 @@ export function RegistrationForm({ onSuccess }: RegistrationFormProps) {
 
           <Button
             type="submit"
+            size="mobile"
             className="w-full"
             disabled={isRegistering || !form.state.canSubmit}
           >

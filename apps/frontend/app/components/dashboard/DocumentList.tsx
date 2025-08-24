@@ -6,10 +6,11 @@ import { DocumentCard } from './DocumentCard';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentDetails } from './DocumentDetails';
 import { ShareDocumentDialog } from './ShareDocumentDialog';
-import { Skeleton } from '@/components/ui/skeleton';
+import { DocumentCardSkeleton } from '@/components/ui/loading-skeleton';
+import { NoDocumentsState, NoSearchResultsState } from '@/components/ui/empty-state';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { DocumentResponse } from '@/lib/documents';
-import { AlertCircle, FileX } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 interface DocumentListProps {
   className?: string;
@@ -75,26 +76,15 @@ export function DocumentList({ className }: DocumentListProps) {
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="space-y-3">
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-              <Skeleton className="h-20 w-full" />
-            </div>
+            <DocumentCardSkeleton key={i} />
           ))}
         </div>
       ) : filteredDocuments.length === 0 ? (
-        <div className="text-center py-12">
-          <FileX className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <h3 className="text-lg font-medium text-muted-foreground mb-2">
-            {documents?.length === 0 ? 'No documents yet' : 'No documents match your filters'}
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            {documents?.length === 0 
-              ? 'Upload your first document to get started'
-              : 'Try adjusting your search or filter criteria'
-            }
-          </p>
-        </div>
+        documents?.length === 0 ? (
+          <NoDocumentsState />
+        ) : (
+          <NoSearchResultsState searchTerm={searchTerm} />
+        )
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredDocuments.map(document => (
