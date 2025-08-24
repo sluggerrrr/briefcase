@@ -65,8 +65,8 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
     
     if (isViewExhausted) {
       return (
-        <Badge className="bg-transparent text-sky-700 dark:text-sky-300 ring-1 ring-inset ring-sky-600/30 gap-1.5">
-          <EyeOff className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" /> View limit reached
+        <Badge className="!bg-sky-50 !text-sky-800 ring-1 ring-inset ring-sky-600/20 dark:!bg-sky-900/30 dark:!text-sky-300 dark:ring-sky-600/30 gap-2 px-3 py-1.5 text-sm font-semibold">
+          <EyeOff className="h-4 w-4 !text-sky-600 dark:!text-sky-300" /> View limit reached
         </Badge>
       );
     }
@@ -74,19 +74,19 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
     switch (document.status) {
       case 'active':
         return (
-          <Badge className="bg-transparent text-emerald-700 dark:text-emerald-300 ring-1 ring-inset ring-emerald-600/30 gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-300" /> Active
+          <Badge className="!bg-emerald-50 !text-emerald-800 ring-1 ring-inset ring-emerald-600/20 dark:!bg-emerald-900/30 dark:!text-emerald-300 dark:ring-emerald-600/30 gap-2 px-3 py-1.5 text-sm font-semibold">
+            <CheckCircle2 className="h-4 w-4 !text-emerald-600 dark:!text-emerald-300" /> Active
           </Badge>
         );
       case 'expired':
         return (
-          <Badge className="bg-transparent text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-600/30 gap-1.5">
-            <AlertTriangle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-300" /> Expired
+          <Badge className="!bg-amber-50 !text-amber-800 ring-1 ring-inset ring-amber-600/20 dark:!bg-amber-900/30 dark:!text-amber-300 dark:ring-amber-600/30 gap-2 px-3 py-1.5 text-sm font-semibold">
+            <AlertTriangle className="h-4 w-4 !text-amber-600 dark:!text-amber-300" /> Expired
           </Badge>
         );
       case 'deleted':
         return (
-          <Badge className="bg-transparent text-neutral-700 dark:text-neutral-300 ring-1 ring-inset ring-neutral-500/30">
+          <Badge className="!bg-neutral-100 !text-neutral-800 ring-1 ring-inset ring-neutral-500/20 dark:!bg-neutral-900/30 dark:!text-neutral-300 dark:ring-neutral-500/30 px-3 py-1.5 text-sm font-semibold">
             Deleted
           </Badge>
         );
@@ -154,14 +154,12 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
           </div>
         </div>
         
-        {/* Status badge moved to own row for better visibility */}
         <div className="pt-2">
           {getStatusBadge()}
         </div>
       </CardHeader>
       
       <CardContent className="pt-0 space-y-4">
-        {/* Primary metadata in a grid */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
           <div>
             <span className="text-muted-foreground">Size</span>
@@ -192,7 +190,6 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
           )}
         </div>
 
-        {/* Email information with better layout */}
         <div className="border-t pt-3">
           <div className="text-sm">
             <span className="text-muted-foreground block mb-1">
@@ -204,7 +201,6 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
           </div>
         </div>
         
-        {/* Description section */}
         {document.description && (
           <div className="border-t pt-3">
             <span className="text-muted-foreground text-sm block mb-2">Description</span>

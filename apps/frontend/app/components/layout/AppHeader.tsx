@@ -3,7 +3,8 @@
 import { LogoutButton } from '@/components/auth/LogoutButton';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Shield, Menu, X } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
+import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -16,9 +17,8 @@ export function AppHeader() {
     <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90" tabIndex={0}>
-            <Shield className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold">Briefcase</h1>
+          <Link href="/" className="hover:opacity-90" tabIndex={0}>
+            <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation */}

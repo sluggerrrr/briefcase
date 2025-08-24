@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Logo } from '@/components/ui/logo';
 import { useAuth } from '@/hooks/useAuth';
 import { useState } from 'react';
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
@@ -47,11 +48,16 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
 
   return (
     <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1 text-center">
-        <CardTitle className="text-2xl font-bold">Welcome to Briefcase</CardTitle>
-        <CardDescription>
-          Enter your credentials to access your secure documents
-        </CardDescription>
+      <CardHeader className="space-y-6 text-center">
+        <div className="flex justify-center pt-4 pb-2">
+          <Logo size="xl" />
+        </div>
+        <div className="space-y-2">
+          <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+          <CardDescription>
+            Enter your credentials to access your secure documents
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <form
