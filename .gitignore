@@ -80,3 +80,6 @@ playwright-report/
 
 # Playwright
 .playwright-mcp/
+
+# Claude Code settings
+.claude/settings.local.json
