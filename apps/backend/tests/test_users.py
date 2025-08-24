@@ -138,6 +138,7 @@ class TestUserRegistrationValidation:
     def test_register_with_weak_password(self, client):
         """Test registration with password validation."""
         user_data = {
+            "name": "New User",
             "email": "newuser@briefcase.com",
             "password": "123"  # Too short
         }
@@ -160,6 +161,7 @@ class TestUserRegistrationValidation:
         
         for idx, email in enumerate(valid_emails):
             user_data = {
+                "name": f"Test User {idx}",
                 "email": email,
                 "password": f"testpassword{idx}"
             }

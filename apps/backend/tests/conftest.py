@@ -90,6 +90,7 @@ def client(db_session):
 def test_user_data():
     """Test user data for registration/login."""
     return {
+        "name": "Test User",
         "email": "test@briefcase.com",
         "password": "testpassword123"
     }
