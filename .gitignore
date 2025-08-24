@@ -71,3 +71,12 @@ files/
 # IDE-specific files
 *.code-workspace
 .history/
+
+# Test results and artifacts
+test-results/
+**/test-results/
+playwright-report/
+**/playwright-report/
+
+# Playwright
+.playwright-mcp/

@@ -7,7 +7,7 @@ import { apiClient } from '@/lib/auth';
 export interface User {
   id: string;
   email: string;
-  name?: string;
+  name: string;
   created_at: string;
 }
 
@@ -32,7 +32,7 @@ export function useUserSearch() {
     const search = searchTerm.toLowerCase();
     return users.filter(user => 
       user.email.toLowerCase().includes(search) ||
-      (user.name && user.name.toLowerCase().includes(search))
+      user.name.toLowerCase().includes(search)
     );
   }, [users, searchTerm]);
 

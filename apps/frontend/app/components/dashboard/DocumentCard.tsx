@@ -7,16 +7,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { DocumentResponse, formatFileSize, formatDate, getMimeTypeIcon } from '@/lib/documents';
 import { useAuth } from '@/hooks/useAuth';
 import { useDeleteDocument, useDownloadDocument } from '@/hooks/useDocuments';
-import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff } from 'lucide-react';
+import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DocumentCardProps {
   document: DocumentResponse;
   onEdit?: (document: DocumentResponse) => void;
   onView?: (document: DocumentResponse) => void;
+  onShare?: (document: DocumentResponse) => void;
 }
 
-export function DocumentCard({ document, onEdit, onView }: DocumentCardProps) {
+export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCardProps) {
   const { user } = useAuth();
   const deleteDocument = useDeleteDocument();
   const downloadDocument = useDownloadDocument();
@@ -116,6 +117,10 @@ export function DocumentCard({ document, onEdit, onView }: DocumentCardProps) {
                 </DropdownMenuItem>
                 {isOwner && (
                   <>
+                    <DropdownMenuItem onClick={() => onShare?.(document)}>
+                      <Share2 className="h-4 w-4 mr-2" />
+                      Share
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onEdit?.(document)}>
                       <Edit className="h-4 w-4 mr-2" />
                       Edit

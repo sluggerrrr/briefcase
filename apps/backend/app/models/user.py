@@ -51,6 +51,9 @@ class User(Base):
     # Primary key with UUID for security  
     id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), index=True)
     
+    # User information
+    name = Column(String(150), nullable=False, default="", index=True)  # Full name with decent length
+    
     # Authentication fields
     email = Column(String(255), unique=True, nullable=False, index=True)
     password_hash = Column(String(255), nullable=False)

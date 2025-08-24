@@ -19,24 +19,28 @@ def create_test_users(db: Session):
     
     test_users = [
         {
+            "name": "Alice Johnson",
             "email": "alice@briefcase.com",
             "password": "alicepass123",
             "is_active": True,
             "description": "Alice - Senior Manager (can share documents)"
         },
         {
+            "name": "Bob Smith",
             "email": "bob@briefcase.com", 
             "password": "bobpass123",
             "is_active": True,
             "description": "Bob - Team Lead (regular user)"
         },
         {
+            "name": "Charlie Brown",
             "email": "charlie@briefcase.com",
             "password": "charliepass123", 
             "is_active": True,
             "description": "Charlie - Developer (regular user)"
         },
         {
+            "name": "Inactive User",
             "email": "inactive@briefcase.com",
             "password": "inactivepass123",
             "is_active": False,
@@ -54,6 +58,7 @@ def create_test_users(db: Session):
         
         # Create new user
         user = User(
+            name=user_data["name"],
             email=user_data["email"],
             password_hash=get_password_hash(user_data["password"]),
             is_active=user_data["is_active"]

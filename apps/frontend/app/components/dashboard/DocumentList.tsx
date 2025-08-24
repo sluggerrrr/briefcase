@@ -5,6 +5,7 @@ import { useDocuments } from '@/hooks/useDocuments';
 import { DocumentCard } from './DocumentCard';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentDetails } from './DocumentDetails';
+import { ShareDocumentDialog } from './ShareDocumentDialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { DocumentResponse } from '@/lib/documents';
@@ -20,6 +21,7 @@ export function DocumentList({ className }: DocumentListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedDocument, setSelectedDocument] = useState<DocumentResponse | null>(null);
+  const [shareDocument, setShareDocument] = useState<DocumentResponse | null>(null);
 
   const { data: documents, isLoading, error } = useDocuments(showSent, showReceived);
 
@@ -100,6 +102,7 @@ export function DocumentList({ className }: DocumentListProps) {
               key={document.id}
               document={document}
               onView={setSelectedDocument}
+              onShare={setShareDocument}
             />
           ))}
         </div>
@@ -110,6 +113,14 @@ export function DocumentList({ className }: DocumentListProps) {
           document={selectedDocument}
           open={!!selectedDocument}
           onClose={() => setSelectedDocument(null)}
+        />
+      )}
+
+      {shareDocument && (
+        <ShareDocumentDialog
+          open={!!shareDocument}
+          onOpenChange={(open) => !open && setShareDocument(null)}
+          document={shareDocument}
         />
       )}
     </div>

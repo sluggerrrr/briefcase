@@ -17,7 +17,7 @@ export function AppHeader() {
         </Link>
         <div className="flex items-center gap-4">
           <span className="text-sm text-muted-foreground">
-            Welcome, {user?.name || user?.email}
+            Welcome, {user?.name}
           </span>
           <LogoutButton />
         </div>

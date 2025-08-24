@@ -12,6 +12,7 @@ class UserLogin(BaseModel):
 
 class UserRegister(BaseModel):
     """Schema for user registration request."""
+    name: str
     email: EmailStr
     password: str
 
@@ -29,6 +30,7 @@ class TokenRefresh(BaseModel):
 class UserResponse(BaseModel):
     """Schema for user response (excludes sensitive data)."""
     id: str
+    name: str
     email: str
     is_active: bool
     created_at: datetime

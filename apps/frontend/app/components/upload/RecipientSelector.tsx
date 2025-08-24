@@ -53,10 +53,8 @@ export function RecipientSelector({
           <div className="flex items-center gap-2 p-2 border rounded-md bg-muted/50">
             <Users className="h-4 w-4 text-muted-foreground" />
             <div className="flex-1">
-              <p className="font-medium text-sm">{selectedRecipient.email}</p>
-              {selectedRecipient.name && (
-                <p className="text-xs text-muted-foreground">{selectedRecipient.name}</p>
-              )}
+              <p className="font-medium text-sm">{selectedRecipient.name}</p>
+              <p className="text-xs text-muted-foreground">{selectedRecipient.email}</p>
             </div>
             {!disabled && (
               <Button
@@ -119,10 +117,8 @@ export function RecipientSelector({
                                 <Users className="h-4 w-4 text-primary" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="font-medium text-sm truncate">{user.email}</p>
-                                {user.name && (
-                                  <p className="text-xs text-muted-foreground truncate">{user.name}</p>
-                                )}
+                                <p className="font-medium text-sm truncate">{user.name}</p>
+                                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                               </div>
                             </div>
                             {isSelected && (
