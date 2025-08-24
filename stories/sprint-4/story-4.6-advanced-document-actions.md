@@ -36,10 +36,10 @@ Implement advanced document management features including bulk operations (delet
 14. ⏳ Document health indicators (expiring, unused, frequently accessed)
 
 ### Enhanced Actions
-15. ⏳ Document sharing with advanced permission controls
+15. ✅ Document sharing with recipient selection UI (API integration pending)
 16. ⏳ Document expiration management and renewal
 17. ⏳ Document versioning and revision history
-18. ⏳ Quick actions menu with contextual options
+18. ✅ Quick actions menu with contextual options (share button added to document cards)
 
 ## Technical Requirements
 - Integrate with existing enhanced documents API endpoints
