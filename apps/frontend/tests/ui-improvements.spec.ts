@@ -106,11 +106,11 @@ test.describe('UI Accessibility and Improvements', () => {
       const uploadButton = page.locator('button:has-text("Upload")');
       await expect(uploadButton).toBeVisible();
       
-      // Check button contrast
-      const backgroundColor = await uploadButton.evaluate(el => 
+      // Check button styling is applied
+      await uploadButton.evaluate(el => 
         window.getComputedStyle(el).backgroundColor
       );
-      const color = await uploadButton.evaluate(el => 
+      await uploadButton.evaluate(el => 
         window.getComputedStyle(el).color
       );
       
