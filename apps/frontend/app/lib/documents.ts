@@ -133,11 +133,11 @@ export const getStatusColor = (status: string): string => {
 };
 
 export const getMimeTypeIcon = (mimeType: string): string => {
-  if (mimeType.startsWith('image/')) return '🖼️';
-  if (mimeType.includes('pdf')) return '📄';
-  if (mimeType.includes('word') || mimeType.includes('document')) return '📝';
-  if (mimeType.includes('excel') || mimeType.includes('spreadsheet')) return '📊';
-  if (mimeType.includes('powerpoint') || mimeType.includes('presentation')) return '📊';
-  if (mimeType.includes('zip') || mimeType.includes('archive')) return '🗜️';
-  return '📎';
+  if (mimeType.startsWith('image/')) return 'Image';
+  if (mimeType.includes('pdf')) return 'FileText';
+  if (mimeType.includes('word') || mimeType.includes('document')) return 'FileText';
+  if (mimeType.includes('excel') || mimeType.includes('spreadsheet')) return 'Table';
+  if (mimeType.includes('powerpoint') || mimeType.includes('presentation')) return 'Presentation';
+  if (mimeType.includes('zip') || mimeType.includes('archive')) return 'Archive';
+  return 'File';
 };

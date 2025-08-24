@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { DocumentResponse, formatFileSize, formatDate, getMimeTypeIcon } from '@/lib/documents';
 import { useAuth } from '@/hooks/useAuth';
 import { useDeleteDocument, useDownloadDocument } from '@/hooks/useDocuments';
-import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff, Share2 } from 'lucide-react';
+import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff, Share2, Image, FileText, Table, Presentation, Archive, File } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DocumentCardProps {
@@ -17,12 +17,25 @@ interface DocumentCardProps {
   onShare?: (document: DocumentResponse) => void;
 }
 
+const getFileIcon = (mimeType: string) => {
+  const iconName = getMimeTypeIcon(mimeType);
+  switch (iconName) {
+    case 'Image': return Image;
+    case 'FileText': return FileText;
+    case 'Table': return Table;
+    case 'Presentation': return Presentation;
+    case 'Archive': return Archive;
+    default: return File;
+  }
+};
+
 export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCardProps) {
   const { user } = useAuth();
   const deleteDocument = useDeleteDocument();
   const downloadDocument = useDownloadDocument();
 
   const isOwner = user?.id === document.sender_id;
+  const FileIcon = getFileIcon(document.mime_type);
 
   const handleDownload = async () => {
     try {
@@ -83,13 +96,15 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2 min-w-0 flex-1">
-            <span className="text-lg">{getMimeTypeIcon(document.mime_type)}</span>
+    <Card className="hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+      <CardHeader className="pb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-3 min-w-0 flex-1">
+            <div className="flex-shrink-0 mt-1">
+              <FileIcon className="h-5 w-5 text-muted-foreground" />
+            </div>
             <div className="min-w-0 flex-1">
-              <h3 className="font-medium truncate" title={document.title}>
+              <h3 className="text-lg font-semibold truncate mb-1" title={document.title}>
                 {document.title}
               </h3>
               <p className="text-sm text-muted-foreground truncate" title={document.file_name}>
@@ -98,11 +113,10 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            {getStatusBadge()}
+          <div className="flex items-start gap-2 flex-shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -139,53 +153,66 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
             </DropdownMenu>
           </div>
         </div>
+        
+        {/* Status badge moved to own row for better visibility */}
+        <div className="pt-2">
+          {getStatusBadge()}
+        </div>
       </CardHeader>
       
-      <CardContent className="pt-0">
-        <div className="space-y-2 text-sm text-muted-foreground">
-          <div className="flex items-center justify-between">
-            <span>Size:</span>
-            <span>{formatFileSize(document.file_size)}</span>
+      <CardContent className="pt-0 space-y-4">
+        {/* Primary metadata in a grid */}
+        <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+          <div>
+            <span className="text-muted-foreground">Size</span>
+            <p className="font-medium">{formatFileSize(document.file_size)}</p>
           </div>
           
-          <div className="flex items-center justify-between">
-            <span>Created:</span>
-            <span>{formatDate(document.created_at)}</span>
+          <div>
+            <span className="text-muted-foreground">Created</span>
+            <p className="font-medium">{formatDate(document.created_at)}</p>
           </div>
           
           {document.expires_at && (
-            <div className="flex items-center justify-between">
-              <span>Expires:</span>
-              <span className={new Date(document.expires_at) < new Date() ? 'text-red-500' : ''}>
+            <div>
+              <span className="text-muted-foreground">Expires</span>
+              <p className={`font-medium ${new Date(document.expires_at) < new Date() ? 'text-red-600 dark:text-red-400' : ''}`}>
                 {formatDate(document.expires_at)}
-              </span>
+              </p>
             </div>
           )}
-          
-          <div className="flex items-center justify-between">
-            <span>{isOwner ? 'Recipient:' : 'Sender:'}</span>
-            <span className="truncate ml-2" title={isOwner ? document.recipient_email : document.sender_email}>
-              {isOwner ? (document.recipient_email || 'Unknown') : (document.sender_email || 'Unknown')}
-            </span>
-          </div>
           
           {document.view_limit && (
-            <div className="flex items-center justify-between">
-              <span>Views:</span>
-              <span>
+            <div>
+              <span className="text-muted-foreground">Views</span>
+              <p className="font-medium">
                 {document.access_count} / {document.view_limit}
-              </span>
-            </div>
-          )}
-          
-          {document.description && (
-            <div className="pt-2 border-t">
-              <p className="text-xs text-muted-foreground line-clamp-2" title={document.description}>
-                {document.description}
               </p>
             </div>
           )}
         </div>
+
+        {/* Email information with better layout */}
+        <div className="border-t pt-3">
+          <div className="text-sm">
+            <span className="text-muted-foreground block mb-1">
+              {isOwner ? 'Recipient' : 'Sender'}
+            </span>
+            <p className="font-medium break-all text-foreground" title={isOwner ? document.recipient_email : document.sender_email}>
+              {isOwner ? (document.recipient_email || 'Unknown') : (document.sender_email || 'Unknown')}
+            </p>
+          </div>
+        </div>
+        
+        {/* Description section */}
+        {document.description && (
+          <div className="border-t pt-3">
+            <span className="text-muted-foreground text-sm block mb-2">Description</span>
+            <p className="text-sm text-foreground line-clamp-3" title={document.description}>
+              {document.description}
+            </p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
