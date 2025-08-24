@@ -1,7 +1,8 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { documentsApi, type DocumentUpdate } from '@/lib/documents';
+import { documentsApi, type DocumentUpdate, type DocumentResponse } from '@/lib/documents';
+import { useMutationErrorHandler } from './useErrorHandler';
 
 export function useDocuments(sent: boolean = true, received: boolean = true) {
   return useQuery({
@@ -35,6 +36,7 @@ export function useDocumentContent(documentId: string, enabled: boolean = false)
 
 export function useUpdateDocument() {
   const queryClient = useQueryClient();
+  const { onError: handleError } = useMutationErrorHandler();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: DocumentUpdate }) =>
@@ -49,9 +51,9 @@ export function useUpdateDocument() {
       // Optimistically update the cache
       queryClient.setQueriesData(
         { queryKey: ['documents'], exact: false },
-        (oldData: any) => {
+        (oldData: DocumentResponse[]) => {
           if (!oldData || !Array.isArray(oldData)) return oldData;
-          return oldData.map((doc: any) => 
+          return oldData.map((doc: DocumentResponse) => 
             doc.id === id ? { ...doc, ...data, updated_at: new Date().toISOString() } : doc
           );
         }
@@ -60,13 +62,15 @@ export function useUpdateDocument() {
       // Return context with snapshotted values
       return { previousDocuments };
     },
-    onError: (err, { id }, context) => {
+    onError: (err, _variables, context) => {
       // Revert optimistic updates on error
       if (context?.previousDocuments) {
         context.previousDocuments.forEach(([queryKey, data]) => {
           queryClient.setQueryData(queryKey, data);
         });
       }
+      // Handle error with user-friendly message
+      handleError(err);
     },
     onSuccess: (updatedDocument) => {
       // Update the document in the cache with server response
@@ -75,9 +79,9 @@ export function useUpdateDocument() {
       // Update the document in all documents list queries with actual server data
       queryClient.setQueriesData(
         { queryKey: ['documents'], exact: false },
-        (oldData: any) => {
+        (oldData: DocumentResponse[]) => {
           if (!oldData || !Array.isArray(oldData)) return oldData;
-          return oldData.map((doc: any) => 
+          return oldData.map((doc: DocumentResponse) => 
             doc.id === updatedDocument.id ? updatedDocument : doc
           );
         }
@@ -92,6 +96,7 @@ export function useUpdateDocument() {
 
 export function useDeleteDocument() {
   const queryClient = useQueryClient();
+  const { onError: handleError } = useMutationErrorHandler();
 
   return useMutation({
     mutationFn: (documentId: string) => documentsApi.deleteDocument(documentId),
@@ -105,9 +110,9 @@ export function useDeleteDocument() {
       // Optimistically remove the document from all lists
       queryClient.setQueriesData(
         { queryKey: ['documents'], exact: false },
-        (oldData: any) => {
+        (oldData: DocumentResponse[]) => {
           if (!oldData || !Array.isArray(oldData)) return oldData;
-          return oldData.filter((doc: any) => doc.id !== documentId);
+          return oldData.filter((doc: DocumentResponse) => doc.id !== documentId);
         }
       );
       
@@ -120,6 +125,8 @@ export function useDeleteDocument() {
           queryClient.setQueryData(queryKey, data);
         });
       }
+      // Handle error with user-friendly message
+      handleError(err);
     },
     onSuccess: (_, documentId) => {
       // Remove document from individual cache
@@ -133,6 +140,8 @@ export function useDeleteDocument() {
 }
 
 export function useDownloadDocument() {
+  const { onError: handleError } = useMutationErrorHandler();
+
   return useMutation({
     mutationFn: (documentId: string) => documentsApi.downloadDocument(documentId),
     onSuccess: (blob) => {
@@ -190,5 +199,6 @@ export function useDownloadDocument() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     },
+    onError: handleError,
   });
 }

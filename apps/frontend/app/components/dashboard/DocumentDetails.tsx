@@ -28,7 +28,7 @@ export function DocumentDetails({ document, open, onClose }: DocumentDetailsProp
       await downloadDocument.mutateAsync(document.id);
       toast.success('Document downloaded successfully');
     } catch {
-      toast.error('Failed to download document');
+      // Error is handled by the mutation's error handler
     }
   };
 
@@ -42,7 +42,7 @@ export function DocumentDetails({ document, open, onClose }: DocumentDetailsProp
       toast.success('Document deleted successfully');
       onClose();
     } catch {
-      toast.error('Failed to delete document');
+      // Error is handled by the mutation's error handler
     }
   };
 

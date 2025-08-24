@@ -68,7 +68,16 @@ export const documentsApi = {
     });
 
     if (!response.ok) {
-      throw new Error(`Download failed: ${response.statusText}`);
+      let errorMessage = `Download failed: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        }
+      } catch {
+        // If parsing fails, use the default error message
+      }
+      throw new Error(errorMessage);
     }
 
     return response.blob();

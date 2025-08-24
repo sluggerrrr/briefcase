@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DocumentResponse } from '@/lib/documents';
+import { DocumentResponse, DocumentUpdate } from '@/lib/documents';
 import { useUpdateDocument } from '@/hooks/useDocuments';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
@@ -47,10 +47,10 @@ export function EditDocumentDialog({ document, open, onOpenChange }: EditDocumen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updateData: any = {
+    const updateData: Partial<DocumentUpdate> = {
       title: title.trim(),
-      description: description.trim() || null,
-      view_limit: viewLimit || null,
+      description: description.trim() || undefined,
+      view_limit: viewLimit || undefined,
     };
 
     // Calculate new expiration date if expires_in is provided
@@ -60,7 +60,7 @@ export function EditDocumentDialog({ document, open, onOpenChange }: EditDocumen
       updateData.expires_at = expirationDate.toISOString();
     } else if (expiresIn === 'none' || expiresIn === '') {
       // Remove expiration if "none" is selected or field is empty
-      updateData.expires_at = null;
+      updateData.expires_at = undefined;
     }
 
     try {
@@ -71,8 +71,8 @@ export function EditDocumentDialog({ document, open, onOpenChange }: EditDocumen
       
       toast.success('Document updated successfully');
       onOpenChange(false);
-    } catch (error) {
-      toast.error('Failed to update document');
+    } catch {
+      // Error is handled by the mutation's error handler
     }
   };
 

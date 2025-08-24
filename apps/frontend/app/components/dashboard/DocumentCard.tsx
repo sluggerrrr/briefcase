@@ -42,7 +42,7 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
       await downloadDocument.mutateAsync(document.id);
       toast.success('Document downloaded successfully');
     } catch {
-      toast.error('Failed to download document');
+      // Error is handled by the mutation's error handler
     }
   };
 
@@ -55,7 +55,7 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
       await deleteDocument.mutateAsync(document.id);
       toast.success('Document deleted successfully');
     } catch {
-      toast.error('Failed to delete document');
+      // Error is handled by the mutation's error handler
     }
   };
 

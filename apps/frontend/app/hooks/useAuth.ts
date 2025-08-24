@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { authStorage, apiClient, type User, type LoginCredentials } from '@/lib/auth';
+import { useFormErrorHandler } from './useErrorHandler';
 
 export interface AuthState {
   user: User | null;
@@ -40,7 +41,12 @@ export function useAuth() {
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Login mutation
+  // Login mutation with enhanced error handling
+  const { handleFormError } = useFormErrorHandler({ 
+    showToast: true,
+    redirectOnAuth: false // Don't redirect on auth errors for login form
+  });
+
   const loginMutation = useMutation({
     mutationFn: (credentials: LoginCredentials) => apiClient.login(credentials),
     onSuccess: (data) => {
@@ -57,6 +63,7 @@ export function useAuth() {
     },
     onError: (error) => {
       console.error('Login failed:', error);
+      handleFormError(error);
       logout();
     },
   });
