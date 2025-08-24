@@ -7,8 +7,10 @@ export function useDocuments(sent: boolean = true, received: boolean = true) {
   return useQuery({
     queryKey: ['documents', { sent, received }],
     queryFn: () => documentsApi.getDocuments(sent, received),
-    staleTime: 30 * 1000, // 30 seconds
-    refetchOnWindowFocus: false,
+    staleTime: 5 * 1000, // 5 seconds - shorter for more frequent updates
+    refetchOnWindowFocus: true, // Refetch when user returns to tab
+    refetchInterval: 30 * 1000, // Auto-refetch every 30 seconds
+    refetchIntervalInBackground: false, // Don't refetch when tab is not active
   });
 }
 
@@ -17,7 +19,8 @@ export function useDocument(documentId: string) {
     queryKey: ['documents', documentId],
     queryFn: () => documentsApi.getDocument(documentId),
     enabled: !!documentId,
-    staleTime: 60 * 1000, // 1 minute
+    staleTime: 10 * 1000, // 10 seconds - shorter for more frequent updates
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -34,13 +37,54 @@ export function useUpdateDocument() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ documentId, data }: { documentId: string; data: DocumentUpdate }) =>
-      documentsApi.updateDocument(documentId, data),
+    mutationFn: ({ id, data }: { id: string; data: DocumentUpdate }) =>
+      documentsApi.updateDocument(id, data),
+    onMutate: async ({ id, data }) => {
+      // Cancel outgoing refetches so they don't overwrite optimistic update
+      await queryClient.cancelQueries({ queryKey: ['documents'] });
+      
+      // Snapshot the previous values
+      const previousDocuments = queryClient.getQueriesData({ queryKey: ['documents'] });
+      
+      // Optimistically update the cache
+      queryClient.setQueriesData(
+        { queryKey: ['documents'], exact: false },
+        (oldData: any) => {
+          if (!oldData || !Array.isArray(oldData)) return oldData;
+          return oldData.map((doc: any) => 
+            doc.id === id ? { ...doc, ...data, updated_at: new Date().toISOString() } : doc
+          );
+        }
+      );
+      
+      // Return context with snapshotted values
+      return { previousDocuments };
+    },
+    onError: (err, { id }, context) => {
+      // Revert optimistic updates on error
+      if (context?.previousDocuments) {
+        context.previousDocuments.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
     onSuccess: (updatedDocument) => {
-      // Update the document in the cache
+      // Update the document in the cache with server response
       queryClient.setQueryData(['documents', updatedDocument.id], updatedDocument);
       
-      // Invalidate documents list to refresh
+      // Update the document in all documents list queries with actual server data
+      queryClient.setQueriesData(
+        { queryKey: ['documents'], exact: false },
+        (oldData: any) => {
+          if (!oldData || !Array.isArray(oldData)) return oldData;
+          return oldData.map((doc: any) => 
+            doc.id === updatedDocument.id ? updatedDocument : doc
+          );
+        }
+      );
+    },
+    onSettled: () => {
+      // Always refetch after error or success to ensure we have fresh data
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
   });
@@ -51,11 +95,38 @@ export function useDeleteDocument() {
 
   return useMutation({
     mutationFn: (documentId: string) => documentsApi.deleteDocument(documentId),
-    onSuccess: (_, documentId) => {
-      // Remove document from cache
-      queryClient.removeQueries({ queryKey: ['documents', documentId] });
+    onMutate: async (documentId) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['documents'] });
       
-      // Invalidate documents list to refresh
+      // Snapshot previous values
+      const previousDocuments = queryClient.getQueriesData({ queryKey: ['documents'] });
+      
+      // Optimistically remove the document from all lists
+      queryClient.setQueriesData(
+        { queryKey: ['documents'], exact: false },
+        (oldData: any) => {
+          if (!oldData || !Array.isArray(oldData)) return oldData;
+          return oldData.filter((doc: any) => doc.id !== documentId);
+        }
+      );
+      
+      return { previousDocuments };
+    },
+    onError: (err, documentId, context) => {
+      // Revert optimistic updates on error
+      if (context?.previousDocuments) {
+        context.previousDocuments.forEach(([queryKey, data]) => {
+          queryClient.setQueryData(queryKey, data);
+        });
+      }
+    },
+    onSuccess: (_, documentId) => {
+      // Remove document from individual cache
+      queryClient.removeQueries({ queryKey: ['documents', documentId] });
+    },
+    onSettled: () => {
+      // Always refetch to ensure consistency
       queryClient.invalidateQueries({ queryKey: ['documents'] });
     },
   });

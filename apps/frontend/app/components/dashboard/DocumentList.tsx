@@ -6,6 +6,7 @@ import { DocumentCard } from './DocumentCard';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentDetails } from './DocumentDetails';
 import { ShareDocumentDialog } from './ShareDocumentDialog';
+import { EditDocumentDialog } from './EditDocumentDialog';
 import { DocumentCardSkeleton } from '@/components/ui/loading-skeleton';
 import { NoDocumentsState, NoSearchResultsState } from '@/components/ui/empty-state';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -23,6 +24,7 @@ export function DocumentList({ className }: DocumentListProps) {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedDocument, setSelectedDocument] = useState<DocumentResponse | null>(null);
   const [shareDocument, setShareDocument] = useState<DocumentResponse | null>(null);
+  const [editDocument, setEditDocument] = useState<DocumentResponse | null>(null);
 
   const { data: documents, isLoading, error } = useDocuments(showSent, showReceived);
 
@@ -93,6 +95,7 @@ export function DocumentList({ className }: DocumentListProps) {
               document={document}
               onView={setSelectedDocument}
               onShare={setShareDocument}
+              onEdit={setEditDocument}
             />
           ))}
         </div>
@@ -111,6 +114,14 @@ export function DocumentList({ className }: DocumentListProps) {
           open={!!shareDocument}
           onOpenChange={(open) => !open && setShareDocument(null)}
           document={shareDocument}
+        />
+      )}
+
+      {editDocument && (
+        <EditDocumentDialog
+          document={editDocument}
+          open={!!editDocument}
+          onOpenChange={(open) => !open && setEditDocument(null)}
         />
       )}
     </div>
