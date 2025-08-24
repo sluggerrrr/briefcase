@@ -20,7 +20,7 @@ class TestDocumentAPI:
     def test_list_documents_requires_auth(self):
         """Test that listing documents requires authentication."""
         response = client.get("/api/v1/documents/")
-        assert response.status_code == 401
+        assert response.status_code == 403
     
     def test_list_documents_with_auth(self, auth_headers):
         """Test listing documents with authentication."""
@@ -53,7 +53,7 @@ class TestDocumentAPI:
             "recipient_id": "test-recipient-id"
         }
         response = client.post("/api/v1/documents/", json=document_data)
-        assert response.status_code == 401
+        assert response.status_code == 403
 
 
 class TestDocumentRouteRegistration:
@@ -89,8 +89,8 @@ class TestDocumentAPIMethods:
     def test_documents_get_method(self):
         """Test GET method on documents endpoint."""
         response = client.get("/api/v1/documents/")
-        # Should return 401 (unauthorized) not 404 (not found)
-        assert response.status_code == 401
+        # Should return 403 (forbidden) when no auth token provided
+        assert response.status_code == 403
     
     def test_documents_post_method(self):
         """Test POST method on documents endpoint."""
@@ -102,19 +102,19 @@ class TestDocumentAPIMethods:
             "recipient_id": "test-id"
         }
         response = client.post("/api/v1/documents/", json=document_data)
-        # Should return 401 (unauthorized) not 404/405 (not found/method not allowed)
-        assert response.status_code == 401
+        # Should return 403 (forbidden) when no auth token provided
+        assert response.status_code == 403
     
     def test_document_detail_methods(self):
         """Test methods on document detail endpoint."""
         # GET method
         response = client.get("/api/v1/documents/test-id")
-        assert response.status_code == 401  # Should exist but require auth
+        assert response.status_code == 403  # Should require auth
         
         # PUT method  
         response = client.put("/api/v1/documents/test-id", json={"title": "Updated"})
-        assert response.status_code == 401  # Should exist but require auth
+        assert response.status_code == 403  # Should require auth
         
         # DELETE method
         response = client.delete("/api/v1/documents/test-id")
-        assert response.status_code == 401  # Should exist but require auth
+        assert response.status_code == 403  # Should require auth

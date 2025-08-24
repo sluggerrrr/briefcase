@@ -141,7 +141,8 @@ export const getStatusColor = (status: string): string => {
   }
 };
 
-export const getMimeTypeIcon = (mimeType: string): string => {
+export const getMimeTypeIcon = (mimeType: string | null): string => {
+  if (!mimeType) return 'File';
   if (mimeType.startsWith('image/')) return 'Image';
   if (mimeType.includes('pdf')) return 'FileText';
   if (mimeType.includes('word') || mimeType.includes('document')) return 'FileText';

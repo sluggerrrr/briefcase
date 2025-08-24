@@ -140,6 +140,7 @@ export function useDeleteDocument() {
 }
 
 export function useDownloadDocument() {
+  const queryClient = useQueryClient();
   const { onError: handleError } = useMutationErrorHandler();
 
   return useMutation({
@@ -200,5 +201,9 @@ export function useDownloadDocument() {
       document.body.removeChild(a);
     },
     onError: handleError,
+    onSettled: () => {
+      // Refetch documents to update access counts after download
+      queryClient.invalidateQueries({ queryKey: ['documents'] });
+    },
   });
 }

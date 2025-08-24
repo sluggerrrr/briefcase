@@ -2,7 +2,7 @@
 """
 Test script to verify cron scripts work locally.
 """
-import asyncio
+import pytest
 import subprocess
 import sys
 from pathlib import Path
@@ -12,6 +12,7 @@ backend_dir = Path(__file__).parent
 sys.path.insert(0, str(backend_dir))
 
 
+@pytest.mark.asyncio
 async def test_cron_scripts():
     """Test all cron scripts."""
     scripts = [
@@ -51,4 +52,5 @@ async def test_cron_scripts():
 
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(test_cron_scripts())

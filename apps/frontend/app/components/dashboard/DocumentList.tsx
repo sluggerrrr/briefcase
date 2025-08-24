@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useDocuments } from '@/hooks/useDocuments';
 import { DocumentCard } from './DocumentCard';
 import { DocumentFilters } from './DocumentFilters';
+import { BulkActionsToolbar } from './BulkActionsToolbar';
+import { useDocumentSelection } from '@/contexts/DocumentSelectionContext';
 import { DocumentDetails } from './DocumentDetails';
 import { ShareDocumentDialog } from './ShareDocumentDialog';
 import { EditDocumentDialog } from './EditDocumentDialog';
@@ -27,6 +29,12 @@ export function DocumentList({ className }: DocumentListProps) {
   const [editDocument, setEditDocument] = useState<DocumentResponse | null>(null);
 
   const { data: documents, isLoading, error } = useDocuments(showSent, showReceived);
+  const { 
+    selectedCount, 
+    isSelectionMode, 
+    selectAllDocuments, 
+    clearSelection 
+  } = useDocumentSelection();
 
   // Filter documents based on search and filters
   const filteredDocuments = documents?.filter(doc => {
@@ -48,6 +56,11 @@ export function DocumentList({ className }: DocumentListProps) {
 
     return true;
   }) || [];
+
+  const handleSelectAll = () => {
+    const documentIds = filteredDocuments.map(doc => doc.id);
+    selectAllDocuments(documentIds);
+  };
 
   if (error) {
     return (
@@ -75,6 +88,16 @@ export function DocumentList({ className }: DocumentListProps) {
         totalCount={documents?.length || 0}
       />
 
+      {/* Bulk Actions Toolbar */}
+      {isSelectionMode && selectedCount > 0 && (
+        <div className="mb-6">
+          <BulkActionsToolbar
+            totalDocuments={filteredDocuments.length}
+            onSelectAll={handleSelectAll}
+          />
+        </div>
+      )}
+
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -96,6 +119,10 @@ export function DocumentList({ className }: DocumentListProps) {
               onView={setSelectedDocument}
               onShare={setShareDocument}
               onEdit={setEditDocument}
+              onManagePermissions={(doc) => {
+                // TODO: Implement permission management dialog
+                console.log('Manage permissions for', doc.title);
+              }}
             />
           ))}
         </div>

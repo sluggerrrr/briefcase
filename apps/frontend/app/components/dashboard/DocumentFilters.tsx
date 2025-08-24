@@ -4,7 +4,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Search, Filter, FileText, Users, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { useDocumentSelection } from '@/contexts/DocumentSelectionContext';
+import { Search, Filter, FileText, Users, CheckCircle, XCircle, Clock, CheckSquare, Square } from 'lucide-react';
 
 interface DocumentFiltersProps {
   searchTerm: string;
@@ -31,6 +32,8 @@ export function DocumentFilters({
   documentCount,
   totalCount,
 }: DocumentFiltersProps) {
+  const { isSelectionMode, setSelectionMode, selectedCount } = useDocumentSelection();
+  
   const statusOptions = [
     { value: 'all', label: 'All Status', icon: FileText },
     { value: 'active', label: 'Active', icon: CheckCircle },
@@ -61,6 +64,21 @@ export function DocumentFilters({
 
       {/* Filter Controls */}
       <div className="flex flex-wrap items-center gap-3">
+        {/* Selection Mode Toggle */}
+        <Button
+          variant={isSelectionMode ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => setSelectionMode(!isSelectionMode)}
+          className="h-8"
+        >
+          {isSelectionMode ? (
+            <CheckSquare className="h-3 w-3 mr-1" />
+          ) : (
+            <Square className="h-3 w-3 mr-1" />
+          )}
+          {isSelectionMode ? `Selected (${selectedCount})` : 'Select'}
+        </Button>
+
         {/* Document Type Toggle */}
         <div className="flex items-center gap-2">
           <Button

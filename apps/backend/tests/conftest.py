@@ -114,3 +114,20 @@ def authenticated_client(client, test_user_data, db_session):
     client.headers.update({"Authorization": f"Bearer {access_token}"})
     
     return client, token_data
+
+
+@pytest.fixture
+def auth_headers(client, test_user_data, db_session):
+    """Create authentication headers for tests."""
+    # Register user
+    response = client.post("/api/v1/auth/register", json=test_user_data)
+    assert response.status_code == 200
+    
+    # Login user
+    response = client.post("/api/v1/auth/login", json=test_user_data)
+    assert response.status_code == 200
+    
+    token_data = response.json()
+    access_token = token_data["access_token"]
+    
+    return {"Authorization": f"Bearer {access_token}"}

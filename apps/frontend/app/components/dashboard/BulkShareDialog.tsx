@@ -36,7 +36,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { useBulkOperations } from '@/hooks/useBulkOperations';
-import { useUserSearch } from '@/hooks/useUserSearch';
+import { useUserSearch, type User } from '@/hooks/useUserSearch';
 import { toast } from 'sonner';
 
 interface BulkShareDialogProps {
@@ -90,7 +90,7 @@ export function BulkShareDialog({
   // Use filtered results from the hook
   const searchResults = allUsers;
 
-  const handleAddUser = (user: { id: string; email: string }) => {
+  const handleAddUser = (user: User) => {
     if (!selectedUsers.find(u => u.id === user.id)) {
       setSelectedUsers([...selectedUsers, user]);
     }

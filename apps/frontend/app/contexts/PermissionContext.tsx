@@ -6,7 +6,7 @@ import { apiClient } from '@/lib/auth';
 
 interface UserPermissions {
   roles: string[];
-  documentPermissions: Record<string, string[]>; // document_id -> permissions
+  document_permissions: Record<string, string[]>; // document_id -> permissions
 }
 
 interface PermissionContextType {
@@ -35,7 +35,7 @@ export function PermissionProvider({ children }: { children: React.ReactNode }) 
   const hasDocumentPermission = (documentId: string, permission: string): boolean => {
     if (!permissions || !documentId) return false;
     
-    const docPermissions = permissions.documentPermissions[documentId];
+    const docPermissions = permissions.document_permissions?.[documentId];
     return docPermissions ? docPermissions.includes(permission) : false;
   };
 
@@ -121,7 +121,7 @@ export const useDocumentPermissions = (documentId: string) => {
     canShare: hasDocumentPermission(documentId, 'share'),
     canDelete: hasDocumentPermission(documentId, 'delete'),
     canManagePermissions: hasDocumentPermission(documentId, 'admin'),
-    permissions: permissions?.documentPermissions[documentId] || [],
+    permissions: permissions?.document_permissions?.[documentId] || [],
   };
 };
 

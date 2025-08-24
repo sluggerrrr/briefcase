@@ -84,10 +84,12 @@ export function useErrorHandler(defaultOptions: UseErrorHandlerOptions = {}): Er
 
     // Handle authentication errors
     if (config.redirectOnAuth !== false && isAuthError(error)) {
-      // Clear any stored tokens
+      // Clear any stored tokens using the proper auth storage
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('briefcase_token');
+        localStorage.removeItem('briefcase_refresh_token');
+        localStorage.removeItem('briefcase_token_expires_at');
+        localStorage.removeItem('briefcase_user');
       }
       
       // Redirect to login after a brief delay to show the toast

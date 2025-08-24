@@ -3,11 +3,14 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Checkbox } from '@/components/ui/checkbox';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { DocumentResponse, formatFileSize, formatDate, getMimeTypeIcon } from '@/lib/documents';
 import { useAuth } from '@/hooks/useAuth';
 import { useDeleteDocument, useDownloadDocument } from '@/hooks/useDocuments';
-import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff, Share2, Image, FileText, Table, Presentation, Archive, File } from 'lucide-react';
+import { useDocumentPermissions } from '@/contexts/PermissionContext';
+import { useDocumentSelection } from '@/contexts/DocumentSelectionContext';
+import { MoreVertical, Download, Eye, Trash2, Edit, CheckCircle2, AlertTriangle, EyeOff, Share2, Settings, Shield, Image, FileText, Table, Presentation, Archive, File } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DocumentCardProps {
@@ -15,6 +18,7 @@ interface DocumentCardProps {
   onEdit?: (document: DocumentResponse) => void;
   onView?: (document: DocumentResponse) => void;
   onShare?: (document: DocumentResponse) => void;
+  onManagePermissions?: (document: DocumentResponse) => void;
 }
 
 const getFileIcon = (mimeType: string) => {
@@ -29,24 +33,56 @@ const getFileIcon = (mimeType: string) => {
   }
 };
 
-export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCardProps) {
+export function DocumentCard({ 
+  document, 
+  onEdit, 
+  onView, 
+  onShare, 
+  onManagePermissions 
+}: DocumentCardProps) {
   const { user } = useAuth();
   const deleteDocument = useDeleteDocument();
   const downloadDocument = useDownloadDocument();
+  
+  const {
+    canView,
+    canEdit,
+    canShare,
+    canDelete,
+    canManagePermissions,
+    permissions
+  } = useDocumentPermissions(document.id);
+
+  const {
+    isSelectionMode,
+    isDocumentSelected,
+    toggleDocumentSelection
+  } = useDocumentSelection();
 
   const isOwner = user?.id === document.sender_id;
+  const isSelected = isDocumentSelected(document.id);
   const FileIcon = getFileIcon(document.mime_type);
 
   const handleDownload = async () => {
+    if (!canView) {
+      toast.error('You do not have permission to download this document');
+      return;
+    }
+
     try {
       await downloadDocument.mutateAsync(document.id);
       toast.success('Document downloaded successfully');
     } catch {
-      // Error is handled by the mutation's error handler
+      toast.error('Failed to download document');
     }
   };
 
   const handleDelete = async () => {
+    if (!canDelete) {
+      toast.error('You do not have permission to delete this document');
+      return;
+    }
+
     if (!window.confirm(`Are you sure you want to delete "${document.title}"?`)) {
       return;
     }
@@ -55,8 +91,32 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
       await deleteDocument.mutateAsync(document.id);
       toast.success('Document deleted successfully');
     } catch {
-      // Error is handled by the mutation's error handler
+      toast.error('Failed to delete document');
     }
+  };
+
+  const handleEdit = () => {
+    if (!canEdit) {
+      toast.error('You do not have permission to edit this document');
+      return;
+    }
+    onEdit?.(document);
+  };
+
+  const handleShare = () => {
+    if (!canShare) {
+      toast.error('You do not have permission to share this document');
+      return;
+    }
+    onShare?.(document);
+  };
+
+  const handleManagePermissions = () => {
+    if (!canManagePermissions) {
+      toast.error('You do not have permission to manage permissions for this document');
+      return;
+    }
+    onManagePermissions?.(document);
   };
 
   const getStatusBadge = () => {
@@ -96,9 +156,25 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+    <Card 
+      className={`hover:shadow-lg transition-all duration-200 hover:scale-[1.02] ${
+        isSelected ? 'ring-2 ring-primary bg-primary/5' : ''
+      } ${isSelectionMode ? 'cursor-pointer hover:bg-muted/50' : ''}`}
+      onClick={() => isSelectionMode && toggleDocumentSelection(document.id)}
+    >
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between gap-3">
+          {/* Selection Checkbox */}
+          {isSelectionMode && (
+            <div className="mr-3 mt-1">
+              <Checkbox
+                checked={isSelected}
+                onCheckedChange={() => toggleDocumentSelection(document.id)}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          )}
+          
           <div className="flex items-start gap-3 min-w-0 flex-1">
             <div className="flex-shrink-0 mt-1">
               <FileIcon className="h-5 w-5 text-muted-foreground" />
@@ -116,7 +192,12 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
           <div className="flex items-start gap-2 flex-shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-8 w-8 hover:bg-muted"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -125,20 +206,42 @@ export function DocumentCard({ document, onEdit, onView, onShare }: DocumentCard
                   <Eye className="h-4 w-4 mr-2" />
                   View Details
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDownload} disabled={downloadDocument.isPending}>
+                
+                <DropdownMenuItem 
+                  onClick={handleDownload} 
+                  disabled={downloadDocument.isPending || !canView}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Download
                 </DropdownMenuItem>
-                {isOwner && (
+
+                {canShare && (
+                  <DropdownMenuItem onClick={handleShare}>
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Share
+                  </DropdownMenuItem>
+                )}
+
+                {canEdit && (
+                  <DropdownMenuItem onClick={handleEdit}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                )}
+
+                {canManagePermissions && (
                   <>
-                    <DropdownMenuItem onClick={() => onShare?.(document)}>
-                      <Share2 className="h-4 w-4 mr-2" />
-                      Share
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleManagePermissions}>
+                      <Shield className="h-4 w-4 mr-2" />
+                      Manage Permissions
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEdit?.(document)}>
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </DropdownMenuItem>
+                  </>
+                )}
+
+                {canDelete && (
+                  <>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem 
                       onClick={handleDelete} 
                       disabled={deleteDocument.isPending}

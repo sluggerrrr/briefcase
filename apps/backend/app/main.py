@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import auth, users, documents, admin, document_status, permissions, documents_enhanced, admin_enhanced, document_status_enhanced
+from app.api.v1 import auth, users, documents, admin, document_status, permissions
 from app.services.lifecycle_service import initialize_lifecycle_config
 from app.services.permission_service import PermissionService
 
@@ -54,17 +54,14 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 
-# Document APIs - both original and enhanced
+# Document APIs
 app.include_router(documents.router, prefix="/api/v1/documents", tags=["documents"])
-app.include_router(documents_enhanced.router, prefix="/api/v1/documents-enhanced", tags=["documents-enhanced"])
 
-# Admin APIs - both original and enhanced  
+# Admin APIs  
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
-app.include_router(admin_enhanced.router, prefix="/api/v1/admin-enhanced", tags=["admin-enhanced"])
 
-# Status APIs - both original and enhanced
+# Status APIs
 app.include_router(document_status.router, prefix="/api/v1/status", tags=["document-status"])
-app.include_router(document_status_enhanced.router, prefix="/api/v1/status-enhanced", tags=["document-status-enhanced"])
 
 # Permission management APIs
 app.include_router(permissions.router, prefix="/api/v1/permissions", tags=["permissions"])
